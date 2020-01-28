@@ -14,8 +14,12 @@ public class Blockchain {
     }
 
     public void addBlock(Block block){
-        if (blockchain.get(-1).getHash() == block.getHash()) {
-            blockchain.add(block);
+        if (blockchain.get(-1).getHash() == block.getPreviousHash()) {
+            if(block.getHash().charAt(0) == '0'){
+                if(Utils.hash(block.hashstring()) == block.getHash()){
+                    blockchain.add(block);
+                }
+            }
         }
     }
     public Block currentBlock() {

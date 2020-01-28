@@ -4,11 +4,12 @@ import java.security.MessageDigest;
 
 public class Block {
 
-    private String previousHash;
+    public String previousHash;
     private ArrayList<Transaction> transactions = new ArrayList<Transaction>();
     public String hash;
     private long timestamp;
-    private int nonce;
+    private int nonce =0 ;
+    public boolean ready = false;
 
     public Block(String previousHash){
         this.previousHash = previousHash;
@@ -16,21 +17,33 @@ public class Block {
     }
 
     public void addTransaction(String sender, String recipient, long amount, String signature){
-        transactions.add(new Transaction(sender,recipient,amount,signature));
+        if(transactions.size() > 10){
+            ready = true;
+        } else {
+            transactions.add(new Transaction(sender,recipient,amount,signature));
+        }
     }
 
-    public void mine(){
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public boolean isReady(){
+        return ready;
+    }
+    public String hashstring() {
         String transString = "";
         for(Transaction transaction : transactions){
             transString = transString + transaction.toString();
         }
         String timeString = Long.toString(timestamp);
-        nonce = 0;
-
-        String s = previousHash + transString + timeString + nonce;
+        return previousHash + transString + timeString + nonce;
+    }
+    public void mine(){
+        String s = hashstring();
         while (Utils.hash(s).charAt(0) != '0'){
             nonce++;
-            s =  previousHash + transString + timeString + nonce;
+             s = hashstring();
         }
         hash = Utils.hash(s);
     }

@@ -6,7 +6,12 @@ public class Node {
 
     public static void main(String[] args) {
         blockchain = new Blockchain();
-        blockchain.currentBlock().addTransaction("emile", "hans", 20, "emile");
+        for(int i = 0;i < 12; i++){
+            blockchain.currentBlock().addTransaction("emile", "hans", 20, "emile");
+        }
+        if(blockchain.currentBlock().isReady()){
+            blockchain.currentBlock().mine();
+        }
         System.out.println(blockchain.printBlockchain());
     }
 }
